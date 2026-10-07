@@ -49,6 +49,11 @@ app.get('/qr', (req, res) => {
     `);
 });
 
+app.post('/send-message', (req, res) => {
+    const { phone, message } = req.body;
+    // logika pengiriman WhatsApp
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server berjalan di port ${PORT}`);
