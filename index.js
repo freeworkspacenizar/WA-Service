@@ -7,18 +7,19 @@ app.use(express.json());
 
 // Inisialisasi client dengan sesi tersimpan otomatis (LocalAuth)
 const client = new Client({
-    authStrategy: new LocalAuth()
-});
-
-// Tampilkan QR Code saat perlu login
-client.on('qr', (qr) => {
-    console.log('Scan QR Code ini menggunakan WhatsApp di HP kamu:');
-    qrcode.generate(qr, { small: true });
-});
-
-// Event ketika berhasil terhubung
-client.on('ready', () => {
-    console.log('WhatsApp API Siap Digunakan!');
+    authStrategy: new LocalAuth(),
+    puppeteer: {
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-accelerated-2d-canvas',
+            '--no-first-run',
+            '--no-zygote',
+            '--disable-gpu'
+        ]
+    }
 });
 
 client.initialize();
