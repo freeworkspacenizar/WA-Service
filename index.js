@@ -54,6 +54,34 @@ app.post('/send-message', (req, res) => {
     // logika pengiriman WhatsApp
 });
 
+// File: index.js
+
+app.post('/send-message', async (req, res) => {
+    const { phone, message } = req.body;
+
+    try {
+        // 1. Logika pengiriman WhatsApp Anda (misal menggunakan Baileys / whatsapp-web.js)
+        await client.sendMessage(`${phone}@c.us`, message);
+
+        // 2. TAMBAHKAN ATAU EDIT BAGIAN INI (Wajib Ada!):
+        // Mengirim respon HTTP 200 agar Apps Script tahu proses berhasil dan tidak timeout
+        return res.status(200).json({
+            status: true,
+            message: 'Pesan WhatsApp berhasil dikirim!'
+        });
+
+    } catch (error) {
+        console.error("Gagal kirim WA:", error);
+
+        // 3. TAMBAHKAN JUGA DI BAGIAN CATCH:
+        // Jika ada error saat pengiriman, tetap kirim respon HTTP 500
+        return res.status(500).json({
+            status: false,
+            message: 'Gagal mengirim pesan: ' + error.message
+        });
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server berjalan di port ${PORT}`);
